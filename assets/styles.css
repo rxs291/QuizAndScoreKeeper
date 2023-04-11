@@ -42,3 +42,14 @@ li #timer {
     background-color: #f0ead6;
     padding-top: 20px;
   }
+
+  #hidden {
+    display: none;
+  }
+
+  a { 
+    text-decoration: none;
+    text-emphasis-color: black;
+    color: purple;  
+
+  }
