@@ -12,6 +12,7 @@ var cardBot = document.querySelector("#bot");
 var timer = document.querySelector('#timer');
 var hidden = document.querySelector('#hidden');
 var listOptions = document.querySelector('#listOptions')
+var save = document.querySelector("#save");
 var index = 0;
 var timerInterval; 
 var highscore = 0;
@@ -161,14 +162,8 @@ for (var i = 1; i<5; i++){
 
 
 /////THE FUNCTION THAT TRIGGERS WHEN THE TIMER REACHES ZERO OR WHEN DISPLAY QUESTIONS
-/////READS AN INDEX OF UNDFINED (NO MORE QUESTIONS). CLEARS CONTAINER. CREATES A SAVER ID
-//// TO BE APPENEDED TO ANOTHER ID'S ELEMENT. CREATES SAVE BUTTON AND GIVES IT AN EVENT LISTNER
-/////WHEN CLICKED, CREATES VARIABLES TO CAPTURE THE INITIALS FROM INPUT BOX AND THE HIGHSCORE
-/////CREATES AN ARRAY FOR THEM TO BE PLACED IN.
-/////CALLS LOCAL STORAGE
-////PUSHES THE ARRAY TO LOCAL STORAGE
-////PUTS BACK INTO THE LOCAL STORAGE.
-///CALLS FOR HIGHSCORES FUNCTION
+/////READS AN INDEX OF UNDFINED (NO MORE QUESTIONS). CLEARS CONTAINER.  
+ 
 
 function displayInputBox(){
     cardTop.textContent = '';
@@ -177,30 +172,7 @@ function displayInputBox(){
     listOptions.textContent= "";
 
     cardTop.textContent = "Please Enter your Initials!";
-    hidden.style.display = "block"; 
-
-    document.querySelector("#save").setAttribute("id", "saver")
-    var save = document.querySelector("#saver");
-
-    save.addEventListener('click', function(event){
-        event.stopPropagation();
-        var initials = "";
-        var yourHighscore = ''; 
-
-        initials = document.querySelector('#initials').value;
-        yourHighscore = {
-            Initials: initials,
-            highscore: highscore
-        }   
-
-        savedScores = JSON.parse(localStorage.getItem("savedHighScores")) || [];   
-        savedScores.push(yourHighscore);   
-        localStorage.setItem("savedHighScores", JSON.stringify(savedScores));    
-
-        renderHighscores();
-
-      });
-
+    hidden.style.display = "block";   
 
 }
  
@@ -262,4 +234,30 @@ function restartQuiz(){
 };
  
 
+
+
  
+/////WHEN CLICKED, CREATES VARIABLES TO CAPTURE THE INITIALS FROM INPUT BOX AND THE HIGHSCORE
+/////CREATES AN ARRAY FOR THEM TO BE PLACED IN.
+/////CALLS LOCAL STORAGE
+////PUSHES THE ARRAY TO LOCAL STORAGE
+////PUTS BACK INTO THE LOCAL STORAGE.
+///CALLS FOR HIGHSCORES FUNCTION 
+
+save.addEventListener('click', function(event){
+        event.stopPropagation();
+        var initials = "";
+        var yourHighscore = ''; 
+
+        initials = document.querySelector('#initials').value;
+        yourHighscore = {
+            Initials: initials,
+            highscore: highscore
+        }   
+
+        var newScores = JSON.parse(localStorage.getItem("savedHighScores")) || [];   
+        newScores.push(yourHighscore);   
+        localStorage.setItem("savedHighScores", JSON.stringify(newScores));     
+        renderHighscores();
+
+      });
