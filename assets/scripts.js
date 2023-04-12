@@ -1,3 +1,5 @@
+
+///// my declared variables
 var startQuiz = document.querySelector("#start");
 var containerDisplay = document.querySelector(".container");
 var cardTop = document.querySelector("#top");
@@ -5,70 +7,70 @@ var cardMid = document.querySelector("#mid");
 var cardBot = document.querySelector("#bot"); 
 var timer = document.querySelector('#timer');
 var hidden = document.querySelector('#hidden');
-var save = document.querySelector("#save");
-var secondsLeft = 80;
 var listOptions = document.querySelector('#listOptions')
 var index = 0;
 var timerInterval; 
 var highscore = 0;
-
+var secondsLeft = 80; 
+var savedScores = [];
+listOptions.style.backgroundColor = "grey";
+listOptions.style.border = "solid black"
  
+
+
 var arrGlobal = [{
-    question: "On a single team, how many players are on a volleyball court?",
-    option1:9,
-    option2:7,
-    option3:6,
-    option4:5,
-    ANSWER:6
+    question: "How many players are on the play field in an NFL game?",
+    option1:11,
+    option2:18,
+    option3:22,
+    option4:26,
+    ANSWER:22
 },
 {
-    question: "The answer is 3",
-    option1:3,
-    option2:4,
-    option3:5,
-    option4:6,
-    ANSWER:3
+    question: "Where are the Patriots from?",
+    option1: "Dallas",
+    option2: "Kanas City",
+    option3: "Foxborough",
+    option4: "New England",
+    ANSWER:"Foxborough"
 },
 {
-    question: "The answer is 4",
-    option1:3,
-    option2:4,
-    option3:5,
-    option4:6,
-    ANSWER:4
+    question: "Who won the 1999 super bowl?",
+    option1:"Chargers",
+    option2: "Cowboys",
+    option3: "Giants",
+    option4: "Broncos",
+    ANSWER:'Broncos'
 },
 {
-    question: "The answer is 5",
-    option1:3,
-    option2:4,
-    option3:5,
-    option4:6,
-    ANSWER:5
+    question: "When a team scores traditionally, it is called a...? ",
+    option1: "Field Goal",
+    option2: "Touchdown",
+    option3: "Extra Point",
+    option4: "Conversion",
+    ANSWER:"Touchdown"
 },
 {
-    question: "The answer is 6",
-    option1:3,
-    option2:4,
-    option3:5,
-    option4:6,
-    ANSWER:3
+    question: "Rushing the passer with more than the usual number of defense players is called a...? ",
+    option1: "Firefly",
+    option2: "Option",
+    option3: "Edgebreak",
+    option4: "Blitzing",
+    ANSWER:"Blitzing"
 }
 ];
 
  
-startQuiz.addEventListener("click", function(){
-    
+startQuiz.addEventListener("click", quizStart)
+
+
+function quizStart() {
 
 
     setTime();
     displayQuestion();
 
-
-
-})
-
-
-
+}
 
 
 
@@ -133,7 +135,7 @@ for (var i = 1; i<5; i++){
     var li = document.createElement("li");
     var button = document.createElement("button");
 
-    button.classList.add("btns")
+    button.classList.add("btns");
     li.textContent = arrGlobal[index]["option" + i];
     button.textContent = "select";
  
@@ -151,40 +153,81 @@ function displayInputBox(){
     listOptions.textContent= "";
 
     cardTop.textContent = "Please Enter your Initials!";
-    hidden.style.display = "block";
+    hidden.style.display = "block"; 
 
-    save.addEventListener('click', function(){
-        var initials = document.querySelector('#initials').value;
-        var yourHighscore = {
-            Initals: initials,
+    document.querySelector("#save").setAttribute("id", "saver")
+    var save = document.querySelector("#saver");
+
+    save.addEventListener('click', function(event){
+        event.stopPropagation();
+        var initials = "";
+        var yourHighscore = '';
+
+        console.log(yourHighscore);
+
+        initials = document.querySelector('#initials').value;
+        yourHighscore = {
+            Initials: initials,
             highscore: highscore
-        }  
+        }   
 
-        var savedScores = JSON.parse(localStorage.getItem("savedHighScores")) || []; 
+        savedScores = JSON.parse(localStorage.getItem("savedHighScores")) || [];   
+        savedScores.push(yourHighscore);   
+        localStorage.setItem("savedHighScores", JSON.stringify(savedScores));    
 
-        savedScores.push(yourHighscore); 
-
-        localStorage.setItem("savedHighScores", JSON.stringify(savedScores));  
-
-        console.log(localStorage.getItem("savedHighScores"));
-
+        renderHighscores();
 
       });
 
 
 }
  
+function renderHighscores(){
+    cardTop.textContent = '';
+    cardMid.textContent = "";
+    cardBot.textContent = "";
+    listOptions.textContent= "";
+    hidden.style.display = "none";
+
+    cardTop.style.fontWeight = "900";
+    cardTop.textContent = "HIGHSCORES";
+    listOptions.style.listStyle = "decimal";
+
+
+    savedScores = JSON.parse(localStorage.getItem("savedHighScores")) || [];
+    savedScores.sort((a,b) => b.highscore - a.highscore);
+
+    for (var i = 0; i<savedScores.length; i++){
+
+        var li = document.createElement("li");
+        li.textContent = savedScores[i].Initials + "    " + savedScores[i].highscore; 
+        listOptions.appendChild(li); 
+
+        };
+
+        var buttonPlayAgain = document.createElement("button");
+        buttonPlayAgain.textContent = "Play Again?";  
+        buttonPlayAgain.addEventListener("click", restartQuiz);
+
+        var clearHighScores = document.createElement("button");
+        clearHighScores.textContent = "Clear Highscores";  
+        clearHighScores.addEventListener("click", function () {
+            localStorage.clear();
+            renderHighscores()
+        });
+
+        cardBot.append(buttonPlayAgain);
+        cardBot.append(clearHighScores);
+;
+
+};
+
+function restartQuiz(){
+    index = 0;
+    secondsLeft = 80; 
+    savedScores = []; 
+    quizStart();
+};
  
 
-
-//!!!GIVEN I am taking a code quiz
-//!!!! WHEN I click the start button
-//!!!!THEN a timer starts and I am presented with a question
-//!!!! WHEN I answer a question
-//!!! THEN I am presented with another question
-//!!!! WHEN I answer a question incorrectly
-//!!!! THEN time is subtracted from the clock
-// WHEN all questions are answered or the timer reaches 0
-// THEN the game is over
-// WHEN the game is over
-// THEN I can save my initials and my score
+ 
