@@ -1,5 +1,9 @@
 
-///// my declared variables
+
+
+
+///// MY DECLARED VARIBLES
+/////
 var startQuiz = document.querySelector("#start");
 var containerDisplay = document.querySelector(".container");
 var cardTop = document.querySelector("#top");
@@ -16,7 +20,6 @@ var savedScores = [];
 listOptions.style.backgroundColor = "grey";
 listOptions.style.border = "solid black"
  
-
 
 var arrGlobal = [{
     question: "How many players are on the play field in an NFL game?",
@@ -61,9 +64,9 @@ var arrGlobal = [{
 ];
 
  
+///// THE EVENT LISTENER THAT STARTS THE GAME AND TIMER
+/////
 startQuiz.addEventListener("click", quizStart)
-
-
 function quizStart() {
 
 
@@ -74,7 +77,9 @@ function quizStart() {
 
 
 
-
+///// THIS EVENT LISTNER IS FOR THE BUTTONS THAT ARE APPENEDED TO THE LIST OF OPTIONS
+/////IN EACH QUESTION. REPLIES WITH RIGHT OR WRONG, ADDS TO THE GLOBAL ARRY INDEX
+//// THEN DISPLAYS QUESTIONS OR DISPLAYS INPUT BOX.
 
 function btnsEventListner(event){
     var element = event.target;
@@ -104,6 +109,10 @@ function btnsEventListner(event){
 }
 
 
+///// ACTIVATES WHEN 'QUIZSTART' ACTIVATES. STARTS A INTERVAL FUNCTION BY DEINCREMNTING
+/////THE GLOBAL  VARIABLE SECONDSLEFT, MAKING BIGGER TO BE VIEWED, AS WELL AS DISPLAY IT.
+///// HAS A SITTING IF STATEMENT TO DISPLAY THE INPUT BOX IF TIME REACHES ZERO
+
 function setTime() { 
 
     timerInterval = setInterval(function() {
@@ -121,6 +130,10 @@ function setTime() {
 
 }
 
+
+/////ACTIVATED WHEN "QUIZSTART" ACTIVATES. CLEARS THE CONTAINER AND DISPLAYS QUESTION
+/////BASED ON "INDEX" VALUE. THEN CREATES A LIST ITEM AND A BUTTON AND EVENT LISTNER
+//// APPENDS THEM ALL TO "LIST OPTIONS"
 function displayQuestion(){
     
     cardBot.textContent = "";
@@ -146,6 +159,17 @@ for (var i = 1; i<5; i++){
 
 }
 
+
+/////THE FUNCTION THAT TRIGGERS WHEN THE TIMER REACHES ZERO OR WHEN DISPLAY QUESTIONS
+/////READS AN INDEX OF UNDFINED (NO MORE QUESTIONS). CLEARS CONTAINER. CREATES A SAVER ID
+//// TO BE APPENEDED TO ANOTHER ID'S ELEMENT. CREATES SAVE BUTTON AND GIVES IT AN EVENT LISTNER
+/////WHEN CLICKED, CREATES VARIABLES TO CAPTURE THE INITIALS FROM INPUT BOX AND THE HIGHSCORE
+/////CREATES AN ARRAY FOR THEM TO BE PLACED IN.
+/////CALLS LOCAL STORAGE
+////PUSHES THE ARRAY TO LOCAL STORAGE
+////PUTS BACK INTO THE LOCAL STORAGE.
+///CALLS FOR HIGHSCORES FUNCTION
+
 function displayInputBox(){
     cardTop.textContent = '';
     cardMid.textContent = "";
@@ -161,9 +185,7 @@ function displayInputBox(){
     save.addEventListener('click', function(event){
         event.stopPropagation();
         var initials = "";
-        var yourHighscore = '';
-
-        console.log(yourHighscore);
+        var yourHighscore = ''; 
 
         initials = document.querySelector('#initials').value;
         yourHighscore = {
@@ -182,6 +204,13 @@ function displayInputBox(){
 
 }
  
+
+
+////FINAL SCREEN SHOW TO RENDER HIGHSCORES
+////CLEARS CONTAINER. CALLS LOCAL STORAGE AND SORTS BY THE KEY VALUE OF HIGHSCORE
+////CREATES LIST ITEMS WITH THE CONTEXT OF INITIALS AND SCORE AND APPENS TO LIST OPTIONS
+////CREATES TWO ADDITIONAL BUTTONS. PLAY AGAIN AND CLEAR HISCORES. 
+////CLEAR HIGHSCORES CLEARS THE LOCAL STORAGE AND RE-RENDERS EMPTY HIGHSCORES
 function renderHighscores(){
     cardTop.textContent = '';
     cardMid.textContent = "";
@@ -205,22 +234,25 @@ function renderHighscores(){
 
         };
 
-        var buttonPlayAgain = document.createElement("button");
-        buttonPlayAgain.textContent = "Play Again?";  
-        buttonPlayAgain.addEventListener("click", restartQuiz);
+    var buttonPlayAgain = document.createElement("button");
+    buttonPlayAgain.textContent = "Play Again?";  
+    buttonPlayAgain.addEventListener("click", restartQuiz);
 
-        var clearHighScores = document.createElement("button");
-        clearHighScores.textContent = "Clear Highscores";  
-        clearHighScores.addEventListener("click", function () {
-            localStorage.clear();
-            renderHighscores()
+    var clearHighScores = document.createElement("button");
+    clearHighScores.textContent = "Clear Highscores";  
+    clearHighScores.addEventListener("click", function () {
+        localStorage.clear();
+        renderHighscores()
         });
 
-        cardBot.append(buttonPlayAgain);
-        cardBot.append(clearHighScores);
+    cardBot.append(buttonPlayAgain);
+    cardBot.append(clearHighScores);
 ;
 
 };
+
+////THIS FUNCTION RESTARTS THE QUIZ BY RESETTING THE VALUES OF INDEX, SECONDS LEFT
+////AND SAVED SCORES THEN CALLS QUIZSTART
 
 function restartQuiz(){
     index = 0;
